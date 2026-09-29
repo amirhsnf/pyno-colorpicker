@@ -1,0 +1,41 @@
+@if(isOpen() || inline()){
+  @if(!inline()){
+    <div class="pcp-overlay" (click)="close()"></div>
+  }
+  <div #pdp class="pyno-colorpicker {{inline() ? 'pcp-inline' : ''}}"
+       [style.width.px]="width()"
+       [style.top.px]="!inline() ? (position() ? position()!.top : 0) : null"
+       [style.left.px]="!inline() ? (position() ? position()!.left : 0) : null"
+       animate.enter="pcp-fade-in"
+       animate.leave="pcp-fade-out">
+    <div #board class="pcp-board" [style.background-color]="'hsl('+hsv.h()+'deg 100% 50%)'">
+      <div class="pcp-bthumb" [style.left.%]="bxPosition()" [style.top.%]="byPosition()"></div>
+    </div>
+    <div class="pcp-body">
+      <div class="pcp-preview-wrapper">
+        <div class="pcp-preview" [style.background-color]="rgbOutput()">
+          @if(supportsEyeDropper){
+            <div class="pcp-eye-dropper" (click)="pickColor()"></div>
+          }
+        </div>
+      </div>
+      <div class="pcp-ctrls">
+        <div #hBar class="pcp-hbar">
+          <div class="pcp-hthumb" [style.left.%]="hPosition()"></div>
+        </div>
+        @if(!disableAlpha()){
+          <div #aBar class="pcp-abar" [style.background-image]="'linear-gradient(90deg, transparent, hsl('+hsl.h()+'deg '+hsl.s()+'% ' +hsl.l()+'%))'">
+            <div class="pcp-athumb" [style.left.%]="aPosition()"></div>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="pcp-footer">
+      <div class="pcp-mode {{colorModes().length > 1 ? 'pcp-mode-changeable' : ''}}" (click)="changeMode()">
+        {{mode()}}
+      </div>
+      <input #input class="pcp-output" [value]="modeOutput()" (input)="init(input.value)">
+      <div class="pcp-copy" [class.pcp-copied]="copied()" (click)="copyOutput()"></div>
+    </div>
+  </div>
+}
